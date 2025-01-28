@@ -1,0 +1,742 @@
+-- MySQL dump 10.13  Distrib 8.0.40, for Linux (x86_64)
+--
+-- Host: localhost    Database: gregorian
+-- ------------------------------------------------------
+-- Server version	8.0.40-0ubuntu0.20.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `tbl_agenda`
+--
+
+DROP TABLE IF EXISTS `tbl_agenda`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_agenda` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) NOT NULL,
+  `empresa_fk` bigint DEFAULT NULL,
+  `status_agenda_fk` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKsy1bjcp8d4segnfhlp8pc7706` (`empresa_fk`),
+  KEY `FK1kawjt1dpfk2yid1ivd8ybg27` (`status_agenda_fk`),
+  CONSTRAINT `FK1kawjt1dpfk2yid1ivd8ybg27` FOREIGN KEY (`status_agenda_fk`) REFERENCES `tbl_status_agenda` (`id`),
+  CONSTRAINT `FKsy1bjcp8d4segnfhlp8pc7706` FOREIGN KEY (`empresa_fk`) REFERENCES `tbl_empresa` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_agenda`
+--
+
+LOCK TABLES `tbl_agenda` WRITE;
+/*!40000 ALTER TABLE `tbl_agenda` DISABLE KEYS */;
+INSERT INTO `tbl_agenda` VALUES (7,'Agenda Editada',NULL,1),(8,'Agenda Terapeuta',NULL,1),(9,'Agenda Médico',NULL,1);
+/*!40000 ALTER TABLE `tbl_agenda` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_agendamento`
+--
+
+DROP TABLE IF EXISTS `tbl_agendamento`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_agendamento` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `data` datetime(6) NOT NULL,
+  `data_registro` datetime(6) NOT NULL,
+  `empresa_fk` bigint DEFAULT NULL,
+  `paciente_fk` bigint DEFAULT NULL,
+  `profissional_fk` bigint DEFAULT NULL,
+  `status_agendamento_fk` bigint DEFAULT NULL,
+  `dia_fk` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKtphpdfkdkd8jr48ypgg4wj6pf` (`empresa_fk`),
+  KEY `FKhgbo17djxki6iuc79gp2a920v` (`paciente_fk`),
+  KEY `FKavd2hd7tny45is5if77vw0vrk` (`profissional_fk`),
+  KEY `FKmcw8iuo4lk80fgl99ay1w7bos` (`status_agendamento_fk`),
+  KEY `FKaqid7kjvg26jka0tnsg2tpe8` (`dia_fk`),
+  CONSTRAINT `FKaqid7kjvg26jka0tnsg2tpe8` FOREIGN KEY (`dia_fk`) REFERENCES `tbl_dias` (`id`),
+  CONSTRAINT `FKavd2hd7tny45is5if77vw0vrk` FOREIGN KEY (`profissional_fk`) REFERENCES `tbl_profissional` (`id`),
+  CONSTRAINT `FKhgbo17djxki6iuc79gp2a920v` FOREIGN KEY (`paciente_fk`) REFERENCES `tbl_paciente` (`id`),
+  CONSTRAINT `FKmcw8iuo4lk80fgl99ay1w7bos` FOREIGN KEY (`status_agendamento_fk`) REFERENCES `tbl_status_agendamento` (`id`),
+  CONSTRAINT `FKtphpdfkdkd8jr48ypgg4wj6pf` FOREIGN KEY (`empresa_fk`) REFERENCES `tbl_empresa` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_agendamento`
+--
+
+LOCK TABLES `tbl_agendamento` WRITE;
+/*!40000 ALTER TABLE `tbl_agendamento` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_agendamento` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_atendimento`
+--
+
+DROP TABLE IF EXISTS `tbl_atendimento`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_atendimento` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `laudo` text,
+  `status_atendimento_fk` bigint DEFAULT NULL,
+  `agendamento_fk` bigint DEFAULT NULL,
+  `horaatual` time(6) DEFAULT NULL,
+  `horafim` time(6) DEFAULT NULL,
+  `horainicio` time(6) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UKhqnixixvnrq2wnjs6fkfte016` (`status_atendimento_fk`),
+  UNIQUE KEY `UKs0swdjnvupshs0mafo4f6ptqr` (`agendamento_fk`),
+  CONSTRAINT `FK22xq47a003osdlf18l1k3r124` FOREIGN KEY (`agendamento_fk`) REFERENCES `tbl_agendamento` (`id`),
+  CONSTRAINT `FKdtguxnrdxcjxec08i8229pbyx` FOREIGN KEY (`status_atendimento_fk`) REFERENCES `tbl_status_atendimento` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_atendimento`
+--
+
+LOCK TABLES `tbl_atendimento` WRITE;
+/*!40000 ALTER TABLE `tbl_atendimento` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_atendimento` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_dia_bloqueado`
+--
+
+DROP TABLE IF EXISTS `tbl_dia_bloqueado`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_dia_bloqueado` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `dia` datetime(6) NOT NULL,
+  `nome` varchar(255) NOT NULL,
+  `empresa_fk` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKf5tk4pdoixeiul4d6ngbaaf2n` (`empresa_fk`),
+  CONSTRAINT `FKf5tk4pdoixeiul4d6ngbaaf2n` FOREIGN KEY (`empresa_fk`) REFERENCES `tbl_empresa` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_dia_bloqueado`
+--
+
+LOCK TABLES `tbl_dia_bloqueado` WRITE;
+/*!40000 ALTER TABLE `tbl_dia_bloqueado` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_dia_bloqueado` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_dias`
+--
+
+DROP TABLE IF EXISTS `tbl_dias`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_dias` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) NOT NULL,
+  `status_dia_fk` bigint DEFAULT NULL,
+  `agenda_fk` bigint DEFAULT NULL,
+  `duracao_sessao_in_minutes` bigint NOT NULL,
+  `fim` time(6) NOT NULL,
+  `inicio` time(6) NOT NULL,
+  `intervalo_sesssao_in_minutes` bigint NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKm0vva0qy2emtloe2dyinp3c00` (`status_dia_fk`),
+  KEY `FKntttcg4i4end20uj2juwu33ul` (`agenda_fk`),
+  CONSTRAINT `FKm0vva0qy2emtloe2dyinp3c00` FOREIGN KEY (`status_dia_fk`) REFERENCES `tbl_status_dia` (`id`),
+  CONSTRAINT `FKntttcg4i4end20uj2juwu33ul` FOREIGN KEY (`agenda_fk`) REFERENCES `tbl_agenda` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_dias`
+--
+
+LOCK TABLES `tbl_dias` WRITE;
+/*!40000 ALTER TABLE `tbl_dias` DISABLE KEYS */;
+INSERT INTO `tbl_dias` VALUES (7,'Segunda',1,7,50,'18:00:00.000000','08:00:00.000000',10),(8,'Terça',1,7,50,'17:00:00.000000','08:00:00.000000',10),(9,'Segunda',1,8,50,'17:00:00.000000','08:00:00.000000',10);
+/*!40000 ALTER TABLE `tbl_dias` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_empresa`
+--
+
+DROP TABLE IF EXISTS `tbl_empresa`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_empresa` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `cnpj` bigint NOT NULL,
+  `endereco` varchar(255) DEFAULT NULL,
+  `nome` varchar(255) DEFAULT NULL,
+  `responsavel` varchar(255) DEFAULT NULL,
+  `telefone` varchar(255) DEFAULT NULL,
+  `plano_empresa_fk` bigint DEFAULT NULL,
+  `status_empresa_fk` bigint DEFAULT NULL,
+  `data_registro` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK2nql605m1r8jghtyaj8icu7b4` (`plano_empresa_fk`),
+  KEY `FKgnqvweqwuyy20fy6vtro8nsym` (`status_empresa_fk`),
+  CONSTRAINT `FK2nql605m1r8jghtyaj8icu7b4` FOREIGN KEY (`plano_empresa_fk`) REFERENCES `tbl_plano_empresa` (`id`),
+  CONSTRAINT `FKgnqvweqwuyy20fy6vtro8nsym` FOREIGN KEY (`status_empresa_fk`) REFERENCES `tbl_status_empresa` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_empresa`
+--
+
+LOCK TABLES `tbl_empresa` WRITE;
+/*!40000 ALTER TABLE `tbl_empresa` DISABLE KEYS */;
+INSERT INTO `tbl_empresa` VALUES (1,123456789,'Rua 0','Gregorian','sysadmin','00 000000000',NULL,NULL,'2024-09-24 15:42:41.406000');
+/*!40000 ALTER TABLE `tbl_empresa` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_endereco`
+--
+
+DROP TABLE IF EXISTS `tbl_endereco`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_endereco` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `cep` varchar(255) DEFAULT NULL,
+  `uf` varchar(255) DEFAULT NULL,
+  `bairro` varchar(255) DEFAULT NULL,
+  `cidade` varchar(255) DEFAULT NULL,
+  `complemento` varchar(255) DEFAULT NULL,
+  `numero` varchar(255) DEFAULT NULL,
+  `rua` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_endereco`
+--
+
+LOCK TABLES `tbl_endereco` WRITE;
+/*!40000 ALTER TABLE `tbl_endereco` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_endereco` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_faturamento`
+--
+
+DROP TABLE IF EXISTS `tbl_faturamento`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_faturamento` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `data` datetime(6) NOT NULL,
+  `desconto` float NOT NULL,
+  `pago` float NOT NULL,
+  `valor` float NOT NULL,
+  `empresa_fk` bigint DEFAULT NULL,
+  `forma_pagamento_fk` bigint DEFAULT NULL,
+  `paciente_fk` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKow7fkl6ijuuweba04o2d4uxpk` (`empresa_fk`),
+  KEY `FKh1ry4u4bih1p2e2c7o4reiuwh` (`forma_pagamento_fk`),
+  KEY `FK2rsb4vgs8c1a2rq0rjtnslxnp` (`paciente_fk`),
+  CONSTRAINT `FK2rsb4vgs8c1a2rq0rjtnslxnp` FOREIGN KEY (`paciente_fk`) REFERENCES `tbl_paciente` (`id`),
+  CONSTRAINT `FKh1ry4u4bih1p2e2c7o4reiuwh` FOREIGN KEY (`forma_pagamento_fk`) REFERENCES `tbl_forma_pagamento` (`id`),
+  CONSTRAINT `FKow7fkl6ijuuweba04o2d4uxpk` FOREIGN KEY (`empresa_fk`) REFERENCES `tbl_empresa` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_faturamento`
+--
+
+LOCK TABLES `tbl_faturamento` WRITE;
+/*!40000 ALTER TABLE `tbl_faturamento` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_faturamento` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_faturamento_empresa`
+--
+
+DROP TABLE IF EXISTS `tbl_faturamento_empresa`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_faturamento_empresa` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `data` datetime(6) DEFAULT NULL,
+  `desconto` float NOT NULL,
+  `empresa_fk` bigint DEFAULT NULL,
+  `plano_empresa_fk` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK47jfscy8l6dy590ccftolojkw` (`empresa_fk`),
+  UNIQUE KEY `UKntki2qmjt8iyqh6heeb5t12s9` (`plano_empresa_fk`),
+  CONSTRAINT `FKh766phqjsp9yi2xrrtl8jl2ix` FOREIGN KEY (`empresa_fk`) REFERENCES `tbl_empresa` (`id`),
+  CONSTRAINT `FKhqlybtqs11rhdk3tt6xcptwaj` FOREIGN KEY (`plano_empresa_fk`) REFERENCES `tbl_plano_empresa` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_faturamento_empresa`
+--
+
+LOCK TABLES `tbl_faturamento_empresa` WRITE;
+/*!40000 ALTER TABLE `tbl_faturamento_empresa` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_faturamento_empresa` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_feriado`
+--
+
+DROP TABLE IF EXISTS `tbl_feriado`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_feriado` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `dia` datetime(6) NOT NULL,
+  `nome` varchar(255) NOT NULL,
+  `empresa_fk` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKb2wa3mcb2tk4vrwq0w2ecp85f` (`empresa_fk`),
+  CONSTRAINT `FKb2wa3mcb2tk4vrwq0w2ecp85f` FOREIGN KEY (`empresa_fk`) REFERENCES `tbl_empresa` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_feriado`
+--
+
+LOCK TABLES `tbl_feriado` WRITE;
+/*!40000 ALTER TABLE `tbl_feriado` DISABLE KEYS */;
+INSERT INTO `tbl_feriado` VALUES (4,'2025-01-25 10:58:05.819000','Natal Edit',1),(5,'2024-11-12 10:58:33.261000','Nossa Senhora Aparecida',1);
+/*!40000 ALTER TABLE `tbl_feriado` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_forma_pagamento`
+--
+
+DROP TABLE IF EXISTS `tbl_forma_pagamento`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_forma_pagamento` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) NOT NULL,
+  `status` int NOT NULL,
+  `empresa_fk` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKacpapaygqjv6esrnmig7mhfsy` (`empresa_fk`),
+  CONSTRAINT `FKacpapaygqjv6esrnmig7mhfsy` FOREIGN KEY (`empresa_fk`) REFERENCES `tbl_empresa` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_forma_pagamento`
+--
+
+LOCK TABLES `tbl_forma_pagamento` WRITE;
+/*!40000 ALTER TABLE `tbl_forma_pagamento` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_forma_pagamento` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_gestor`
+--
+
+DROP TABLE IF EXISTS `tbl_gestor`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_gestor` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `login` varchar(255) DEFAULT NULL,
+  `nome` varchar(255) DEFAULT NULL,
+  `role` tinyint DEFAULT NULL,
+  `senha` varchar(255) DEFAULT NULL,
+  `sobrenome` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `tbl_gestor_chk_1` CHECK ((`role` between 0 and 4))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_gestor`
+--
+
+LOCK TABLES `tbl_gestor` WRITE;
+/*!40000 ALTER TABLE `tbl_gestor` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_gestor` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_horas`
+--
+
+DROP TABLE IF EXISTS `tbl_horas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_horas` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `fim` time(6) NOT NULL,
+  `inicio` time(6) NOT NULL,
+  `status_hora_fk` bigint DEFAULT NULL,
+  `dia_fk` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK2vtn7tj0gcmosj1brnh4ccn2p` (`status_hora_fk`),
+  KEY `FKh4ra3bwsmisnb3c844bc3uveg` (`dia_fk`),
+  CONSTRAINT `FK2vtn7tj0gcmosj1brnh4ccn2p` FOREIGN KEY (`status_hora_fk`) REFERENCES `tbl_status_hora` (`id`),
+  CONSTRAINT `FKh4ra3bwsmisnb3c844bc3uveg` FOREIGN KEY (`dia_fk`) REFERENCES `tbl_dias` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=407 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_horas`
+--
+
+LOCK TABLES `tbl_horas` WRITE;
+/*!40000 ALTER TABLE `tbl_horas` DISABLE KEYS */;
+INSERT INTO `tbl_horas` VALUES (379,'08:50:00.000000','08:00:00.000000',1,NULL),(380,'09:50:00.000000','09:00:00.000000',1,NULL),(381,'10:50:00.000000','10:00:00.000000',1,NULL),(382,'11:50:00.000000','11:00:00.000000',1,NULL),(383,'12:50:00.000000','12:00:00.000000',1,NULL),(384,'13:50:00.000000','13:00:00.000000',1,NULL),(385,'14:50:00.000000','14:00:00.000000',1,NULL),(386,'15:50:00.000000','15:00:00.000000',1,NULL),(387,'16:50:00.000000','16:00:00.000000',1,NULL),(388,'08:50:00.000000','08:00:00.000000',1,7),(389,'09:50:00.000000','09:00:00.000000',1,7),(390,'10:50:00.000000','10:00:00.000000',1,7),(391,'11:50:00.000000','11:00:00.000000',1,7),(392,'12:50:00.000000','12:00:00.000000',2,7),(393,'13:50:00.000000','13:00:00.000000',1,7),(394,'14:50:00.000000','14:00:00.000000',1,7),(395,'15:50:00.000000','15:00:00.000000',1,7),(396,'16:50:00.000000','16:00:00.000000',1,7),(397,'17:50:00.000000','17:00:00.000000',1,7),(398,'08:50:00.000000','08:00:00.000000',1,9),(399,'09:50:00.000000','09:00:00.000000',1,9),(400,'10:50:00.000000','10:00:00.000000',1,9),(401,'11:50:00.000000','11:00:00.000000',1,9),(402,'12:50:00.000000','12:00:00.000000',1,9),(403,'13:50:00.000000','13:00:00.000000',1,9),(404,'14:50:00.000000','14:00:00.000000',1,9),(405,'15:50:00.000000','15:00:00.000000',1,9),(406,'16:50:00.000000','16:00:00.000000',1,9);
+/*!40000 ALTER TABLE `tbl_horas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_paciente`
+--
+
+DROP TABLE IF EXISTS `tbl_paciente`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_paciente` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) DEFAULT NULL,
+  `login` varchar(255) DEFAULT NULL,
+  `nome` varchar(255) DEFAULT NULL,
+  `senha` varchar(255) DEFAULT NULL,
+  `sobrenome` varchar(255) DEFAULT NULL,
+  `telefone` bigint NOT NULL,
+  `empresa_fk` bigint DEFAULT NULL,
+  `endereco_fk` bigint DEFAULT NULL,
+  `plano_paciente_fk` bigint DEFAULT NULL,
+  `cpf` bigint NOT NULL,
+  `data_registro` datetime(6) NOT NULL,
+  `sexo` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UKab2djce0ymxsmw976q9nubfij` (`endereco_fk`),
+  KEY `FKatht9r22gpevoohxxw3q1x4hs` (`empresa_fk`),
+  KEY `FK1rqoyamemqbycgefuhledumb0` (`plano_paciente_fk`),
+  CONSTRAINT `FK1rqoyamemqbycgefuhledumb0` FOREIGN KEY (`plano_paciente_fk`) REFERENCES `tbl_plano_paciente` (`id`),
+  CONSTRAINT `FKatht9r22gpevoohxxw3q1x4hs` FOREIGN KEY (`empresa_fk`) REFERENCES `tbl_empresa` (`id`),
+  CONSTRAINT `FKlvefu1raaeru4bp9pgnhhbytd` FOREIGN KEY (`endereco_fk`) REFERENCES `tbl_endereco` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_paciente`
+--
+
+LOCK TABLES `tbl_paciente` WRITE;
+/*!40000 ALTER TABLE `tbl_paciente` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_paciente` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_plano_empresa`
+--
+
+DROP TABLE IF EXISTS `tbl_plano_empresa`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_plano_empresa` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `desconto` float NOT NULL,
+  `nome` varchar(255) DEFAULT NULL,
+  `valor` float NOT NULL,
+  `vigencia` datetime(6) DEFAULT NULL,
+  `data_registro` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_plano_empresa`
+--
+
+LOCK TABLES `tbl_plano_empresa` WRITE;
+/*!40000 ALTER TABLE `tbl_plano_empresa` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_plano_empresa` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_plano_paciente`
+--
+
+DROP TABLE IF EXISTS `tbl_plano_paciente`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_plano_paciente` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `desconto` float NOT NULL,
+  `nome` varchar(255) DEFAULT NULL,
+  `sessoes` int NOT NULL,
+  `status` int NOT NULL,
+  `valor` float NOT NULL,
+  `empresa_fk` bigint DEFAULT NULL,
+  `data_registro` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKoer5jexen7x7qa5roudn67sul` (`empresa_fk`),
+  CONSTRAINT `FKoer5jexen7x7qa5roudn67sul` FOREIGN KEY (`empresa_fk`) REFERENCES `tbl_empresa` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_plano_paciente`
+--
+
+LOCK TABLES `tbl_plano_paciente` WRITE;
+/*!40000 ALTER TABLE `tbl_plano_paciente` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_plano_paciente` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_profissional`
+--
+
+DROP TABLE IF EXISTS `tbl_profissional`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_profissional` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `registro` varchar(255) DEFAULT NULL,
+  `titulo` varchar(255) DEFAULT NULL,
+  `agenda_fk` bigint DEFAULT NULL,
+  `usuario_fk` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UKrv12jpy7c411r3fb7l9q5w9e4` (`agenda_fk`),
+  UNIQUE KEY `UKix95659q5lcxj266m0wps1so3` (`usuario_fk`),
+  CONSTRAINT `FK4aotvcquxctickf35xm44y9fg` FOREIGN KEY (`usuario_fk`) REFERENCES `tbl_usuario` (`id`),
+  CONSTRAINT `FKd4opn9jykfkgxfkxxeuopd5nm` FOREIGN KEY (`agenda_fk`) REFERENCES `tbl_agenda` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_profissional`
+--
+
+LOCK TABLES `tbl_profissional` WRITE;
+/*!40000 ALTER TABLE `tbl_profissional` DISABLE KEYS */;
+INSERT INTO `tbl_profissional` VALUES (1,'987654321','Administrador',7,1),(4,'CRM:MG02124','Dr',NULL,8);
+/*!40000 ALTER TABLE `tbl_profissional` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_status_agenda`
+--
+
+DROP TABLE IF EXISTS `tbl_status_agenda`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_status_agenda` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_status_agenda`
+--
+
+LOCK TABLES `tbl_status_agenda` WRITE;
+/*!40000 ALTER TABLE `tbl_status_agenda` DISABLE KEYS */;
+INSERT INTO `tbl_status_agenda` VALUES (1,'Ativo');
+/*!40000 ALTER TABLE `tbl_status_agenda` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_status_agendamento`
+--
+
+DROP TABLE IF EXISTS `tbl_status_agendamento`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_status_agendamento` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_status_agendamento`
+--
+
+LOCK TABLES `tbl_status_agendamento` WRITE;
+/*!40000 ALTER TABLE `tbl_status_agendamento` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_status_agendamento` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_status_atendimento`
+--
+
+DROP TABLE IF EXISTS `tbl_status_atendimento`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_status_atendimento` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_status_atendimento`
+--
+
+LOCK TABLES `tbl_status_atendimento` WRITE;
+/*!40000 ALTER TABLE `tbl_status_atendimento` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_status_atendimento` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_status_dia`
+--
+
+DROP TABLE IF EXISTS `tbl_status_dia`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_status_dia` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_status_dia`
+--
+
+LOCK TABLES `tbl_status_dia` WRITE;
+/*!40000 ALTER TABLE `tbl_status_dia` DISABLE KEYS */;
+INSERT INTO `tbl_status_dia` VALUES (1,'Ativo'),(2,'Bloqueado');
+/*!40000 ALTER TABLE `tbl_status_dia` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_status_empresa`
+--
+
+DROP TABLE IF EXISTS `tbl_status_empresa`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_status_empresa` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_status_empresa`
+--
+
+LOCK TABLES `tbl_status_empresa` WRITE;
+/*!40000 ALTER TABLE `tbl_status_empresa` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_status_empresa` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_status_hora`
+--
+
+DROP TABLE IF EXISTS `tbl_status_hora`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_status_hora` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_status_hora`
+--
+
+LOCK TABLES `tbl_status_hora` WRITE;
+/*!40000 ALTER TABLE `tbl_status_hora` DISABLE KEYS */;
+INSERT INTO `tbl_status_hora` VALUES (1,'Ativo'),(2,'Bloqueado');
+/*!40000 ALTER TABLE `tbl_status_hora` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_usuario`
+--
+
+DROP TABLE IF EXISTS `tbl_usuario`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_usuario` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `data_registro` datetime(6) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `endereco` varchar(255) DEFAULT NULL,
+  `login` varchar(64) NOT NULL,
+  `nascimento` datetime(6) NOT NULL,
+  `nome` varchar(255) NOT NULL,
+  `role` tinyint NOT NULL,
+  `senha` varchar(255) NOT NULL,
+  `sobrenome` varchar(255) NOT NULL,
+  `telefone` varchar(255) DEFAULT NULL,
+  `empresa_fk` bigint DEFAULT NULL,
+  `status` int NOT NULL,
+  `altera_next_logon` bit(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UKqxdl98e0qb14v0ethxqsatkjc` (`login`),
+  KEY `FKh13ane3v0tqm64oq3jreishtk` (`empresa_fk`),
+  CONSTRAINT `FKh13ane3v0tqm64oq3jreishtk` FOREIGN KEY (`empresa_fk`) REFERENCES `tbl_empresa` (`id`),
+  CONSTRAINT `tbl_usuario_chk_1` CHECK ((`role` between 0 and 4))
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_usuario`
+--
+
+LOCK TABLES `tbl_usuario` WRITE;
+/*!40000 ALTER TABLE `tbl_usuario` DISABLE KEYS */;
+INSERT INTO `tbl_usuario` VALUES (1,'2024-09-24 15:29:26.051000','admin@gregorian.com','-','sysadmin','1994-12-18 00:00:00.000000','Administrador',0,'$2a$10$D1ilSlp2go0zikh7TmRhnuRr91DqO.8LYugdJQmBFatAts7brYO0q','Sistema','-',1,1,_binary '\0'),(8,'2024-10-23 14:37:28.622000','guilhermegf16@gmail.com','Rua Carlos Magno Erler, 52','guilherme','1994-12-18 00:00:00.000000','Guilherme',0,'$2a$10$NrNG06/.eLhdayvdhVK46OUdLxgYEtmWaZDqQ5Mz.zyHlcDZrFIY.','Flauzino','35999219099',1,1,_binary '\0'),(13,'2024-12-18 16:43:48.757000','guilhermegf16@gmail.com','Rua Carlos Magno Erler, 52','agendamento','1994-12-18 00:00:00.000000','Agendamento',3,'$2a$10$AtimeJuTKpCZYan2jMluU.f84ktJMUblqDtjg1Eif/fxl3b6j7eWO','Gragorian','35999219099',1,1,_binary '\0');
+/*!40000 ALTER TABLE `tbl_usuario` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2025-01-24 11:05:36
